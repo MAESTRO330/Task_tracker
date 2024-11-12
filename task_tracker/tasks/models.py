@@ -38,7 +38,7 @@ class User(AbstractUser):
 
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=80)
-    username = models.CharField(max_length=150)
+    username = models.CharField(max_length=150, unique=True)
     user_email = models.EmailField()
     user_avatar = models.ImageField(upload_to='avatars/')
     user_role = models.CharField(choices=role_choices, max_length=5)
@@ -81,13 +81,13 @@ class Task(models.Model):
     title = models.CharField(max_length=150)
     description = models.TextField()
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    executor = models.ForeignKey(User, on_delete=models.CASCADE) #Исполнитель
     status = models.CharField(choices=status_choices, max_length=5)
     priority = models.CharField(choices=prioriy_choices, max_length=5)
     date_create = models.DateField(auto_now_add=True)
     date_update = models.DateField(auto_now=True)
     deadline = models.DateTimeField()
-    tester = models.ForeignKey(User, on_delete=models.CASCADE)
+    tester = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tester')
     # comment = models.TextField(null=True, blank=True)
 
     def new_comment(self, data):
