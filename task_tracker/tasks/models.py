@@ -39,12 +39,18 @@ class User(AbstractUser):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=80)
     username = models.CharField(max_length=150, unique=True)
-    user_email = models.EmailField()
-    user_avatar = models.ImageField(upload_to='avatars/')
+    email = models.EmailField(unique=True)
+    user_avatar = models.ImageField(upload_to='avatars/', default='avatars\\Login_default_Avatar.png', blank=True, null=True)
     user_role = models.CharField(choices=role_choices, max_length=5)
     user_position = models.CharField(choices=position_choices, max_length=5)
     # current_projects = models.ForeignKey(Project, on_delete=models.CASCADE)
     # archive_projects = models.ForeignKey(Project, on_delete=models.CASCADE)
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username']
+
+    def __str__(self):
+        return self.email
 
 class Project(models.Model):
     title = models.CharField(max_length=150)
@@ -52,7 +58,7 @@ class Project(models.Model):
     date_create = models.DateField(auto_now_add=True)
     date_update = models.DateField(auto_now=True)
     deadline = models.DateTimeField()
-    team = models.ForeignKey(User, on_delete=models.CASCADE)
+    team = models.ManyToManyField(User)
     status = models.BooleanField(default=False)
 
 class Task(models.Model):
@@ -98,7 +104,7 @@ class Task(models.Model):
         new_comment.save()
 
 class Comment(models.Model):
-    Author = models.ForeignKey(User, on_delete=models.CASCADE)
-    Message = models.TextField()
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    message = models.TextField()
     task = models.ForeignKey(Task, on_delete=models.CASCADE)
     date_time = models.DateTimeField(auto_now_add=True)
