@@ -13,6 +13,9 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 import os
 from datetime import timedelta
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,10 +25,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-gfnr9*dnsj%korybk0p6rra4+l9u23b7k_!=3652i*1s9)$4dw'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = bool(os.getenv('DEBUG'))
 
 ALLOWED_HOSTS = []
 
@@ -93,11 +96,11 @@ WSGI_APPLICATION = 'task_tracker.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'task_tracker',
-        'USER': 'postgres',
-        'PASSWORD': 'DataBase16',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
+        'NAME': os.getenv('NAME'),
+        'USER': os.getenv('USER'),
+        'PASSWORD': os.getenv('PASSWORD'),
+        'HOST': os.getenv('HOST'),
+        'PORT': os.getenv('PORT'),
     }
 }
 
